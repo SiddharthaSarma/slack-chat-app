@@ -1,16 +1,20 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Login from '../components/Auth/Login';
+import Register from '../components/Auth/Register';
 
-import "./styles.css";
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <h1>Hello CodeSandbox</h1>
-      <h2>Start editing to see some magic happen!</h2>
-    </div>
-  );
-}
+import './styles.css';
 
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+const Root = () => (
+  <Router>
+    <Switch>
+      <Route path="/" exact component={Login} />
+      <Route path="/register" component={Register} />
+    </Switch>
+  </Router>
+);
+
+const rootElement = document.getElementById('root');
+ReactDOM.render(<Root />, rootElement);
