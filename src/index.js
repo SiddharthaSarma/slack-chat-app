@@ -5,6 +5,7 @@ import Register from './components/Auth/Register';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+import 'semantic-ui-css/semantic.min.css';
 import './styles.css';
 
 const Root = () => (
