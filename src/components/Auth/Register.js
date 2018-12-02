@@ -17,7 +17,8 @@ class Register extends Component {
     username: '',
     email: '',
     password: '',
-    passwordConfirmation: ''
+    passwordConfirmation: '',
+    loading: false
   };
 
   handleChange = event => {
@@ -26,16 +27,52 @@ class Register extends Component {
     });
   };
 
+  toggleLoading = () => {
+    this.setState(state => {
+      return { loading: !state.loading };
+    });
+  };
   handleSubmit = event => {
     event.preventDefault();
-    console.log(this.state);
+    if (!this.isFormValid) {
+      return false;
+    }
+    this.toggleLoading();
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(createdUser => {
+        this.toggleLoading();
         console.log(createdUser);
       })
-      .error(err => console.error(err));
+      .catch(err => {
+        this.toggleLoading();
+        console.error(err);
+      });
+  };
+
+  isFormValid = () => {
+    if (this.isFormEmpty()) {
+      return false;
+    } else if (this.isPasswordLengthShort()) {
+      return false;
+    } else if (this.isPasswordsDoesnotMatch()) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+  isFormEmpty = () => {
+    const { username, email, password, passwordConfirmation } = this.state;
+    return !username || !email || !password || !passwordConfirmation;
+  };
+
+  isPasswordLengthShort = () => {
+    return this.state.password.length < 6;
+  };
+
+  isPasswordsDoesnotMatch = () => {
+    return this.state.password === this.state.passwordConfirmation;
   };
 
   render() {
@@ -89,7 +126,11 @@ class Register extends Component {
                 onChange={this.handleChange}
                 value={passwordConfirmation}
               />
-              <Button fluid color="orange">
+              <Button
+                className={this.state.loading ? 'ui loading button' : null}
+                fluid
+                color="orange"
+              >
                 Register
               </Button>
             </Segment>
