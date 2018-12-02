@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import md5 from 'md5';
 import {
   Grid,
   Form,
@@ -18,7 +19,8 @@ class Register extends Component {
     email: '',
     password: '',
     passwordConfirmation: '',
-    loading: false
+    loading: false,
+    usersRef: firebase.database().ref('users')
   };
 
   handleChange = event => {
@@ -42,8 +44,20 @@ class Register extends Component {
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(createdUser => {
-        this.toggleLoading();
-        console.log(createdUser);
+        createdUser.user
+          .updateProfile({
+            displayName: this.state.username,
+            photoURL: `http://gravatar.com/avatar/${md5(
+              createdUser.user.email
+            )}?d=identicon`
+          })
+          .then(() =>
+            this.saveUser(createdUser).then(() => {
+              this.toggleLoading();
+              console.log('user created');
+            })
+          )
+          .catch(err => console.error(err));
       })
       .catch(err => {
         this.toggleLoading();
@@ -62,6 +76,7 @@ class Register extends Component {
       return true;
     }
   };
+
   isFormEmpty = () => {
     const { username, email, password, passwordConfirmation } = this.state;
     return !username || !email || !password || !passwordConfirmation;
@@ -73,6 +88,13 @@ class Register extends Component {
 
   isPasswordsDoesnotMatch = () => {
     return this.state.password === this.state.passwordConfirmation;
+  };
+
+  saveUser = createdUser => {
+    return this.state.usersRef.child(createdUser.user.uid).set({
+      name: createdUser.user.displayName,
+      avatar: createdUser.user.photoURL
+    });
   };
 
   render() {
