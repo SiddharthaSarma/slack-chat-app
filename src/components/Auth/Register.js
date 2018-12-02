@@ -29,17 +29,20 @@ class Register extends Component {
     });
   };
 
-  toggleLoading = () => {
-    this.setState(state => {
-      return { loading: !state.loading };
-    });
+  showLoading = () => {
+    this.setState({ loading: true });
   };
+
+  hideLoading = () => {
+    this.setState({ loading: false });
+  };
+
   handleSubmit = event => {
     event.preventDefault();
     if (!this.isFormValid) {
       return false;
     }
-    this.toggleLoading();
+    this.showLoading();
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
@@ -53,14 +56,14 @@ class Register extends Component {
           })
           .then(() =>
             this.saveUser(createdUser).then(() => {
-              this.toggleLoading();
+              this.hideLoading();
               console.log('user created');
             })
           )
           .catch(err => console.error(err));
       })
       .catch(err => {
-        this.toggleLoading();
+        this.hideLoading();
         console.error(err);
       });
   };

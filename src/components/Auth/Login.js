@@ -25,26 +25,29 @@ class Login extends Component {
     });
   };
 
-  toggleLoading = () => {
-    this.setState(state => {
-      return { loading: !state.loading };
-    });
+  showLoading = () => {
+    this.setState({ loading: true });
   };
+
+  hideLoading = () => {
+    this.setState({ loading: false });
+  };
+
   handleSubmit = event => {
     event.preventDefault();
     if (!this.isFormValid()) {
       return false;
     }
-    this.toggleLoading();
+    this.showLoading();
     firebase
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(value => {
-        this.toggleLoading();
-        console.log(value);
+        this.hideLoading();
+        this.props.history.push('/');
       })
       .catch(err => {
-        this.toggleLoading();
+        this.hideLoading();
         console.log(err);
       });
   };
