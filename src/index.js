@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Spinner from './Spinner';
-import { App } from './components/App';
+import App  from './components/App';
 import firebase from './firebase';
 import {
   BrowserRouter as Router,
@@ -28,6 +28,8 @@ class Root extends Component {
       if (user) {
         this.props.setUser(user);
         this.props.history.push('/');
+      } else {
+        this.props.history.push('/login');
       }
     });
   }
