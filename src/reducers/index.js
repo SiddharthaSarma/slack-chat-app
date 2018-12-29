@@ -3,7 +3,7 @@ import * as actionTypes from '../actions/types';
 
 const initialState = {
   currentUser: null,
-  isLoading: true
+  isLoading: false
 };
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -11,6 +11,11 @@ const userReducer = (state = initialState, action) => {
       return {
         currentUser: action.payload.currentUser,
         isLoading: false
+      };
+    case actionTypes.SIGNOUT_USER:
+      return {
+        ...initialState,
+        loading: false
       };
     default:
       return state;

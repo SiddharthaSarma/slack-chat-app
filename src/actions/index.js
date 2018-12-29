@@ -8,3 +8,9 @@ export const setUser = user => {
     }
   };
 };
+
+export const signoutUser = () => {
+  return {
+    type: actionTypes.SIGNOUT_USER
+  };
+};

@@ -36,6 +36,7 @@ class Login extends Component {
   handleSubmit = event => {
     event.preventDefault();
     if (!this.isFormValid()) {
+      console.log('hey');
       return false;
     }
     this.showLoading();
@@ -52,7 +53,12 @@ class Login extends Component {
       });
   };
 
-  isFormValid = () => {};
+  isFormValid = () => {
+    if (!this.isFormEmpty()) {
+      return true;
+    }
+    return true;
+  };
 
   isFormEmpty = () => this.state.email && this.state.password;
 
